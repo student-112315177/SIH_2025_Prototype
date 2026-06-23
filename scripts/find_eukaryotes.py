@@ -1,10 +1,14 @@
 from Bio.Blast import NCBIXML
 from Bio import SeqIO
 import pandas as pd
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
 
 # --- CONFIGURATION ---
-INPUT_XML_FILE = "blast_report.xml"
-INPUT_FASTA_FILE = "Combined_50_sequences.fasta"
+INPUT_XML_FILE = os.path.join(DATA_DIR, "tables", "blast_report.xml")
+INPUT_FASTA_FILE = os.path.join(DATA_DIR, "fasta", "Combined_50_sequences.fasta")
 # ---
 
 print(f"Searching for known Eukaryotes in '{INPUT_XML_FILE}'...")

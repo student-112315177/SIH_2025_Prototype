@@ -1,10 +1,15 @@
 import pandas as pd
-print("--- STARTING DATA CLEANING SCRIPT (ULTIMATE VERSION) ---")
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data", "labels")
+
+print("--- STARTING DATA CLEANING SCRIPT ---")
 try:
-    df = pd.read_csv('deep_sea_labeled.csv')
+    df = pd.read_csv(os.path.join(DATA_DIR, 'deep_sea_labeled.csv'))
     print(f"\n[INFO] Successfully loaded 'deep_sea_labeled.csv'. Shape: {df.shape}")
 except FileNotFoundError:
-    print("[ERROR] 'deep_sea_labeled.csv' not found. Exiting.")
+    print(f"[ERROR] '{os.path.join(DATA_DIR, 'deep_sea_labeled.csv')}' not found. Exiting.")
     exit()
 
 # Ensure the column names are correct
@@ -29,6 +34,5 @@ print(cleaned_counts)
 if cleaned_df.empty:
     print("\n[ERROR] The cleaned dataset is empty! No class had more than one sample.")
 else:
-    # This line ensures the header is always included correctly
-    cleaned_df.to_csv('deep_sea_labeled_clean.csv', index=False)
-    print("\n[SUCCESS] Cleaned dataset saved to 'deep_sea_labeled_clean.csv'")
+    cleaned_df.to_csv(os.path.join(DATA_DIR, 'deep_sea_labeled_clean.csv'), index=False)
+    print(f"\n[SUCCESS] Cleaned dataset saved to '{os.path.join(DATA_DIR, 'deep_sea_labeled_clean.csv')}'")

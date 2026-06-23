@@ -3,11 +3,15 @@ from Bio.Blast import NCBIXML
 from Bio import SeqIO
 import pandas as pd
 import re
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
 
 # --- CONFIGURATION ---
-INPUT_XML_FILE = "blast_report.xml"
-INPUT_FASTA_FILE = "Combined_50_sequences.fasta"
-OUTPUT_CSV_FILE = "deep_sea_labeled.csv"
+INPUT_XML_FILE = os.path.join(DATA_DIR, "tables", "blast_report.xml")
+INPUT_FASTA_FILE = os.path.join(DATA_DIR, "fasta", "Combined_50_sequences.fasta")
+OUTPUT_CSV_FILE = os.path.join(DATA_DIR, "labels", "deep_sea_labeled.csv")
 # ---
 
 def get_best_taxonomy(title):

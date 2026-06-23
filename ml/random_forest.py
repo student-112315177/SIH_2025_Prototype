@@ -1,10 +1,12 @@
 ﻿import pickle
 import numpy as np
+import os
 from sklearn.ensemble import RandomForestClassifier
 from embeddings import fasta_to_matrix
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Load embeddings
-X, ids = fasta_to_matrix("../bioinformatics/ASVs.fasta", k=6)
+X, ids = fasta_to_matrix(os.path.join(SCRIPT_DIR, "..", "data", "fasta", "ASVs.fasta"), k=6)
 
 # Fake labels (replace later with taxonomy)
 y = np.random.choice(["taxon1", "taxon2", "taxon3"], size=len(X))

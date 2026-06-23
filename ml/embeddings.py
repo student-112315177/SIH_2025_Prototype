@@ -18,5 +18,5 @@ def fasta_to_matrix(fasta_file, k=6):
     return np.array(kmers), ids
 
 if __name__ == "__main__":
-    X, ids = fasta_to_matrix("../bioinformatics/ASVs.fasta", k=6)
+    X, ids = fasta_to_matrix("../data/fasta/ASVs.fasta", k=6)
     print(f"Generated embeddings for {len(ids)} sequences")

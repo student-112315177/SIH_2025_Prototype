@@ -7,6 +7,12 @@ import tensorflow as tf
 from tensorflow import keras
 import os
 import pickle
+
+# --- Path Configuration ---
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.join(APP_DIR, "..")
+ASSETS_DIR = os.path.join(APP_DIR, "assets")
+MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 from collections import defaultdict
 import plotly.express as px
 from Bio.Blast import NCBIWWW, NCBIXML
@@ -24,20 +30,30 @@ NOVEL_PATTERN_LABEL = 'Rhizoclosmatium sp.'
 import base64
 
 def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image:
-        encoded_string = base64.b64encode(image.read()).decode()
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background: linear-gradient(rgba(14,17,23,0.7), rgba(14,17,23,0.7)),
-                        url(data:image/png;base64,{encoded_string}) no-repeat center center fixed;
-            background-size: cover;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    try:
+        with open(image_file, "rb") as image:
+            encoded_string = base64.b64encode(image.read()).decode()
+        st.markdown(
+            f"""
+            <style>
+            .stApp {{
+                background: linear-gradient(rgba(14,17,23,0.7), rgba(14,17,23,0.7)),
+                            url(data:image/png;base64,{encoded_string}) no-repeat center center fixed;
+                background-size: cover;
+            }}
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+    except FileNotFoundError:
+        st.markdown(
+            """
+            <style>
+            .stApp { background-color: #0e1117; }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 def local_css(file_name):
@@ -131,7 +147,7 @@ def generate_live_novelty_report(_sequences_dict):
 
 @st.cache_resource
 def load_dl_model():
-    model_path = "dl_model.h5"
+    model_path = os.path.join(MODELS_DIR, "dl_model.h5")
     if os.path.exists(model_path):
         try: return keras.models.load_model(model_path)
         except Exception as e: st.error(f"Error loading DL model: {e}")
@@ -140,7 +156,7 @@ def load_dl_model():
 
 @st.cache_resource
 def load_rf_model():
-    model_path = os.path.join("models", "random_forest_baseline.pkl")
+    model_path = os.path.join(MODELS_DIR, "random_forest_baseline.pkl")
     if os.path.exists(model_path):
         try:
             with open(model_path, 'rb') as file: return pickle.load(file)
@@ -150,7 +166,7 @@ def load_rf_model():
 
 @st.cache_resource
 def load_xgb_model():
-    model_path = os.path.join("models", "xgboost_model.pkl")
+    model_path = os.path.join(MODELS_DIR, "xgboost_model.pkl")
     if os.path.exists(model_path):
         try:
             with open(model_path, 'rb') as file: return pickle.load(file)
@@ -160,7 +176,7 @@ def load_xgb_model():
 
 @st.cache_resource
 def get_label_encoder():
-    encoder_path = os.path.join("models", "label_encoder.pkl")
+    encoder_path = os.path.join(MODELS_DIR, "label_encoder.pkl")
     try:
         with open(encoder_path, 'rb') as file:
             return pickle.load(file)
@@ -242,8 +258,8 @@ def display_results(final_df, report_title):
 
 
 def main():
-    local_css("style.css") # Load CSS
-    add_bg_from_local("dna_helix.png")
+    local_css(os.path.join(APP_DIR, "style.css")) # Load CSS
+    add_bg_from_local(os.path.join(ASSETS_DIR, "dna_helix.png"))
 
     
     if 'analysis_run' not in st.session_state: st.session_state.analysis_run = False

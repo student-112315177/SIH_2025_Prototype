@@ -4,6 +4,12 @@ from tensorflow.keras import layers
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import class_weight
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
+
 def one_hot_encode_sequence(sequence):
     nucleotide_map = {'A': [1,0,0,0], 'C': [0,1,0,0], 'G': [0,0,1,0], 'T': [0,0,0,1], 'N': [0,0,0,0]}
     return np.array([nucleotide_map.get(n, [0,0,0,0]) for n in sequence])
@@ -14,15 +20,15 @@ def pad_sequence(encoded_seq, target_length=282):
         return np.vstack([encoded_seq, padding])
     return encoded_seq[:target_length] if current_length > target_length else encoded_seq
 print("Loading and preprocessing data...")
-labeled_df = pd.read_csv('deep_sea_labeled_clean.csv')
+labeled_df = pd.read_csv(os.path.join(DATA_DIR, "labels", "deep_sea_labeled_clean.csv"))
 sequences = labeled_df['sequence'].apply(lambda x: pad_sequence(one_hot_encode_sequence(x)))
 X = np.array(sequences.tolist())
 encoder = LabelEncoder()
 y_encoded = encoder.fit_transform(labeled_df['taxonomy'])
 y_categorical = keras.utils.to_categorical(y_encoded)
-if not os.path.exists('models'): os.makedirs('models')
-with open('models/label_encoder.pkl', 'wb') as file: pickle.dump(encoder, file)
-print("Label encoder has been saved to models/label_encoder.pkl")
+if not os.path.exists(MODELS_DIR): os.makedirs(MODELS_DIR)
+with open(os.path.join(MODELS_DIR, 'label_encoder.pkl'), 'wb') as file: pickle.dump(encoder, file)
+print(f"Label encoder has been saved to {os.path.join(MODELS_DIR, 'label_encoder.pkl')}")
 X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=0.3, random_state=42, stratify=y_categorical)
 print("Calculating class weights...")
 y_train_indices = np.argmax(y_train, axis=1)
@@ -45,5 +51,5 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 model.summary()
 print("Training the Deep Learning model...")
 model.fit(X_train, y_train, epochs=50, batch_size=16, validation_data=(X_test, y_test), class_weight=class_weights_dict, verbose=2)
-model.save('dl_model.h5')
-print("Deep Learning model saved successfully as dl_model.h5")
+model.save(os.path.join(MODELS_DIR, 'dl_model.h5'))
+print(f"Deep Learning model saved successfully to {os.path.join(MODELS_DIR, 'dl_model.h5')}")

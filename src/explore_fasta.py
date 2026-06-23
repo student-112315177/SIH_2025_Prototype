@@ -7,7 +7,7 @@ from collections import Counter
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 FILENAME_TO_CHECK = "Combined_50_sequences.fasta"
-FILEPATH_TO_CHECK = os.path.join(PROJECT_ROOT, FILENAME_TO_CHECK)
+FILEPATH_TO_CHECK = os.path.join(PROJECT_ROOT, "data", "fasta", FILENAME_TO_CHECK)
 
 # --- Main Script ---
 def analyze_fasta_content():

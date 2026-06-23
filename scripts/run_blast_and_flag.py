@@ -2,15 +2,20 @@ import pandas as pd
 from Bio.Blast import NCBIXML
 from Bio.Blast import NCBIWWW
 from Bio import SeqIO
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
 
 print("Starting online BLAST search. This may take several minutes...")
 
 # 1. Read your ASVs from the FASTA file
+fasta_path = os.path.join(DATA_DIR, "fasta", "ASVs.fasta")
 try:
-    fasta_string = open("ASVs.fasta").read()
+    fasta_string = open(fasta_path).read()
     print("Successfully read ASVs.fasta. Submitting to NCBI BLAST...")
 except FileNotFoundError:
-    print("Error: ASVs.fasta not found. Make sure the DADA2 step ran successfully.")
+    print(f"Error: {fasta_path} not found. Make sure the DADA2 step ran successfully.")
     exit()
 
 # 2. Run the BLAST search online using NCBI's servers
@@ -56,6 +61,6 @@ for record in blast_records:
 
 # 4. Save the final report to a CSV file
 output_df = pd.DataFrame(blast_results)
-output_df.to_csv("novelty_report.csv", index=False)
+output_df.to_csv(os.path.join(DATA_DIR, "labels", "novelty_report.csv"), index=False)
 
-print("Novelty flagging complete! Your report has been saved to novelty_report.csv")
+print("Novelty flagging complete! Your report has been saved to data/labels/novelty_report.csv")

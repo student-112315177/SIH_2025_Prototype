@@ -22,5 +22,5 @@ mergers <- mergePairs(dadaFs, derepFs, dadaRs, derepRs)
 seqtab <- makeSequenceTable(mergers)
 seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE)
 
-write.csv(seqtab.nochim, "bioinformatics/ASV_table.csv")
-uniquesToFasta(seqtab.nochim, fout="bioinformatics/ASVs.fasta")
+write.csv(seqtab.nochim, "data/tables/ASV_table.csv")
+uniquesToFasta(seqtab.nochim, fout="data/fasta/ASVs.fasta")

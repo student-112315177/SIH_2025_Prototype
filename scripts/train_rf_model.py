@@ -5,6 +5,11 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
 import pickle, os
 from collections import defaultdict
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 def get_kmer_features(sequences, k=6):
     all_kmer_counts = []
     for seq in sequences:
@@ -15,12 +20,12 @@ def get_kmer_features(sequences, k=6):
         all_kmer_counts.append(kmer_counts)
     return pd.DataFrame(all_kmer_counts).fillna(0)
 print("Loading and preprocessing data for Random Forest...")
-labeled_df = pd.read_csv('deep_sea_labeled_clean.csv')
+labeled_df = pd.read_csv(os.path.join(DATA_DIR, "labels", "deep_sea_labeled_clean.csv"))
 encoder = LabelEncoder()
 y = encoder.fit_transform(labeled_df['taxonomy'])
-if not os.path.exists('models'): os.makedirs('models')
-with open('models/label_encoder.pkl', 'wb') as file: pickle.dump(encoder, file)
-print("Label encoder has been saved to models/label_encoder.pkl")
+if not os.path.exists(MODELS_DIR): os.makedirs(MODELS_DIR)
+with open(os.path.join(MODELS_DIR, 'label_encoder.pkl'), 'wb') as file: pickle.dump(encoder, file)
+print(f"Label encoder saved to {os.path.join(MODELS_DIR, 'label_encoder.pkl')}")
 X_kmer = get_kmer_features(labeled_df['sequence'])
 X_train, X_test, y_train, y_test = train_test_split(X_kmer, y, test_size=0.3, random_state=42, stratify=y)
 train_cols = X_train.columns
@@ -31,5 +36,5 @@ rf_model.fit(X_train, y_train)
 print("\nEvaluating model performance...")
 y_pred = rf_model.predict(X_test)
 print(classification_report(y_test, y_pred, target_names=encoder.classes_, zero_division=0))
-with open('models/random_forest_baseline.pkl', 'wb') as file: pickle.dump(rf_model, file)
-print("Random Forest model saved successfully to models/random_forest_baseline.pkl")
+with open(os.path.join(MODELS_DIR, 'random_forest_baseline.pkl'), 'wb') as file: pickle.dump(rf_model, file)
+print(f"Random Forest model saved successfully to {os.path.join(MODELS_DIR, 'random_forest_baseline.pkl')}")

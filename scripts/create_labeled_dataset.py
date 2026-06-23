@@ -1,11 +1,15 @@
 import pandas as pd
 from Bio import SeqIO
 import re
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
 
 # --- Configuration ---
-input_report_csv = "large_dataset_report.csv"
-input_fasta = "new_ASVs.fasta"
-output_labeled_csv = "deep_sea_labeled.csv"
+input_report_csv = os.path.join(DATA_DIR, "labels", "large_dataset_report.csv")
+input_fasta = os.path.join(DATA_DIR, "fasta", "new_ASVs.fasta")
+output_labeled_csv = os.path.join(DATA_DIR, "labels", "deep_sea_labeled.csv")
 
 # --- Helper function to extract a simple taxonomic label ---
 def get_taxonomy_label(description):

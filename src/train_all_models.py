@@ -20,9 +20,9 @@ MODEL_TO_TRAIN = "random_forest" # Options: "random_forest", "xgboost", "cnn"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 
-# Point to the files in the main project folder
-FASTA_FILE = os.path.join(PROJECT_ROOT, "training_data_processed.fasta")
-LABELS_FILE = os.path.join(PROJECT_ROOT, "training_labels_processed.csv")
+# Point to the files in the data subdirectories
+FASTA_FILE = os.path.join(PROJECT_ROOT, "data", "fasta", "training_data_processed.fasta")
+LABELS_FILE = os.path.join(PROJECT_ROOT, "data", "labels", "training_labels_processed.csv")
 
 # Helper functions (get_kmer_features, one_hot_encode, pad_sequence) remain the same...
 def get_kmer_features(sequences, k=6):
@@ -112,12 +112,15 @@ def main():
     print("\nClassification Report:")
     print(classification_report(y_true, y_pred, target_names=label_encoder.classes_))
 
-    # Save models to the main project folder
+    # Save models to the models folder
+    models_dir = os.path.join(PROJECT_ROOT, "models")
+    if MODELS_DIR and not os.path.exists(models_dir):
+        os.makedirs(models_dir)
     if MODEL_TO_TRAIN == "cnn":
-        model_path = os.path.join(PROJECT_ROOT, "eDNA_model_cnn_50_seq.h5")
+        model_path = os.path.join(models_dir, "eDNA_model_cnn_50_seq.h5")
         model.save(model_path)
     else:
-        model_path = os.path.join(PROJECT_ROOT, f"eDNA_model_{MODEL_TO_TRAIN}_50_seq.pkl")
+        model_path = os.path.join(models_dir, f"eDNA_model_{MODEL_TO_TRAIN}_50_seq.pkl")
         with open(model_path, 'wb') as f:
             pickle.dump(model, f)
             

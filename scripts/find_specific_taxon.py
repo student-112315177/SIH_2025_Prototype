@@ -1,11 +1,15 @@
 # find_specific_taxon.py
 from Bio.Blast import NCBIXML
 from Bio import SeqIO
-import sys # Import sys to read command-line arguments
+import sys
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
 
 # --- CONFIGURATION ---
-INPUT_XML_FILE = "blast_report.xml"
-INPUT_FASTA_FILE = "Combined_50_sequences.fasta"
+INPUT_XML_FILE = os.path.join(DATA_DIR, "tables", "blast_report.xml")
+INPUT_FASTA_FILE = os.path.join(DATA_DIR, "fasta", "Combined_50_sequences.fasta")
 # ---
 
 # Check if a taxon name was provided

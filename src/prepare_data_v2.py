@@ -7,13 +7,13 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # The main project folder is one level up from the 'src' folder
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 
-# SPECIFY THE FILE IN THE MAIN FOLDER
+# SPECIFY THE FILE IN THE DATA/FASTA FOLDER
 INPUT_FILENAME = "Combined_50_sequences.fasta"
-INPUT_FILEPATH = os.path.join(PROJECT_ROOT, INPUT_FILENAME)
+INPUT_FILEPATH = os.path.join(PROJECT_ROOT, "data", "fasta", INPUT_FILENAME)
 
-# Define output file paths (will be created in the main project folder)
-PROCESSED_FASTA_OUTPUT = os.path.join(PROJECT_ROOT, "training_data_processed.fasta")
-LABELS_CSV_OUTPUT = os.path.join(PROJECT_ROOT, "training_labels_processed.csv")
+# Define output file paths (will be created in data subdirectories)
+PROCESSED_FASTA_OUTPUT = os.path.join(PROJECT_ROOT, "data", "fasta", "training_data_processed.fasta")
+LABELS_CSV_OUTPUT = os.path.join(PROJECT_ROOT, "data", "labels", "training_labels_processed.csv")
 
 # --- Main Script Logic ---
 def create_training_files_from_single_source():

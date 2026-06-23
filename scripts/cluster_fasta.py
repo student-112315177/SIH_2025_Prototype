@@ -1,9 +1,13 @@
 from Bio import SeqIO
 from collections import defaultdict
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+FASTA_DIR = os.path.join(SCRIPT_DIR, "..", "data", "fasta")
 
 # --- Configuration ---
-input_fasta = "Combined_50_sequences.fasta" 
-output_fasta = "new_ASVs.fasta"
+input_fasta = os.path.join(FASTA_DIR, "Combined_50_sequences.fasta") 
+output_fasta = os.path.join(FASTA_DIR, "new_ASVs.fasta")
 
 print(f"Reading sequences from {input_fasta}...")
 

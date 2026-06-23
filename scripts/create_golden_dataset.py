@@ -1,4 +1,8 @@
 import pandas as pd
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data", "labels")
 
 # This script was automatically generated from your 'golden' dataset.
 # It ensures perfect formatting every time, avoiding file errors.
@@ -80,7 +84,7 @@ if len(df['sequence']) != len(df['taxonomy']):
     print("[ERROR] The number of sequences does not match the number of labels. Please check your lists.")
 else:
     # Save to CSV with the correct header, ensuring no errors
-    df.to_csv('deep_sea_labeled.csv', index=False)
+    df.to_csv(os.path.join(DATA_DIR, 'deep_sea_labeled.csv'), index=False)
     print(f"[SUCCESS] 'deep_sea_labeled.csv' has been created with {len(df)} rows.")
     print("\nClass distribution:")
     print(df['taxonomy'].value_counts())

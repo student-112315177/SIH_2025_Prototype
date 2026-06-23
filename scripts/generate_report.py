@@ -1,9 +1,13 @@
 from Bio.Blast import NCBIWWW
 import time
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
 
 # --- CONFIGURATION ---
-INPUT_FASTA_FILE = "Combined_50_sequences.fasta"
-OUTPUT_XML_FILE = "blast_report.xml"  # This is the correct filename and extension
+INPUT_FASTA_FILE = os.path.join(DATA_DIR, "fasta", "Combined_50_sequences.fasta")
+OUTPUT_XML_FILE = os.path.join(DATA_DIR, "tables", "blast_report.xml")
 # ---
 
 print(f"Reading sequences from '{INPUT_FASTA_FILE}'...")
